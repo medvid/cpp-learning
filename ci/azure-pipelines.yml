@@ -1,0 +1,54 @@
+trigger:
+- master
+
+jobs:
+- job: build_linux
+  displayName: Linux build
+
+  pool:
+    vmImage: ubuntu-18.04
+
+  steps:
+  - task: CMake@1
+    displayName: "GCC x64 build"
+    inputs:
+      cmakeArgs: '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-Wall -Wextra"'
+      workingDirectory: build/gcc-x64
+
+  - task: CMake@1
+    displayName: "Clang x64 build"
+    inputs:
+      cmakeArgs: '-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS="-Wall -Wextra"'
+      workingDirectory: build/clang-x64
+
+- job: build_windows
+  displayName: Windows build
+
+  pool:
+    vmImage: windows-2019
+
+  steps:
+  - task: CMake@1
+    displayName: "MSVC++ 2019 x64 build"
+    inputs:
+      cmakeArgs: '-G "Visual Studio 16 2019" -A x64'
+      workingDirectory: build/msvc2019-x64
+
+  - task: CMake@1
+    displayName: "MSVC++ 2019 x32 build"
+    inputs:
+      cmakeArgs: '-G "Visual Studio 16 2019" -A Win32'
+      workingDirectory: build/msvc2019-x32
+
+- job: build_macos
+  displayName: MacOS build
+
+  pool:
+    vmImage: macos-10.14
+
+  steps:
+  - task: CMake@1
+    displayName: "Xcode build"
+    inputs:
+      cmakeArgs: '-G "Xcode"'
+      workingDirectory: build/xcode
