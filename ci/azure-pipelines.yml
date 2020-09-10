@@ -10,8 +10,8 @@ jobs:
 
   steps:
   - script: |
-      sudo apt update -qq
-      sudo apt install -y ninja-build g++-multilib clang lld libc++-dev libc++abi-dev
+      sudo apt update -q
+      sudo apt install -q -y ninja-build g++-multilib clang lld
       cmake --version
       ninja --version
       g++ --version
