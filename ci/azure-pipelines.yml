@@ -9,11 +9,12 @@ jobs:
     vmImage: ubuntu-18.04
 
   steps:
-  - task: CMake@1
-    displayName: "GCC x64 build"
-    inputs:
-      cmakeArgs: '-S ../.. -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-Wall -Wextra"'
-      workingDirectory: build/gcc-x64
+  - script: |
+      cmake -S . -B build/gcc-x64/Debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-Wall -Wextra"
+      cd build/gcc-x64/Debug
+      cmake --build .
+      ctest --verbose
+    displayName: "GCC x64 Debug build"
 
   - task: CMake@1
     displayName: "Clang x64 build"
