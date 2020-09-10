@@ -10,17 +10,18 @@ jobs:
 
   steps:
   - script: |
-      cmake -S . -B build/gcc-x64/Debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-Wall -Wextra"
+      cmake -S . -B build/gcc-x64/Debug -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror"
       cd build/gcc-x64/Debug
-      cmake --build .
+      cmake --verbose --build .
       ctest --verbose
     displayName: "GCC x64 Debug build"
 
-  - task: CMake@1
-    displayName: "Clang x64 build"
-    inputs:
-      cmakeArgs: '-S ../.. -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS="-Wall -Wextra"'
-      workingDirectory: build/clang-x64
+  - script: |
+      cmake -S . -B build/gcc-x32/Release -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-m32 -Wall -Wextra -Werror"
+      cd build/gcc-x32/Release
+      cmake --verbose --build .
+      ctest --verbose
+    displayName: "GCC x32 Release build"
 
 - job: build_windows
   displayName: Windows build
@@ -29,17 +30,19 @@ jobs:
     vmImage: windows-2019
 
   steps:
-  - task: CMake@1
-    displayName: "MSVC++ 2019 x64 build"
-    inputs:
-      cmakeArgs: '-S ../.. -G "Visual Studio 16 2019" -A x64'
-      workingDirectory: build/msvc2019-x64
+  - script: |
+      cmake -S . -B build/msvc2019-x64/Debug -DCMAKE_BUILD_TYPE=Debug  -G "Visual Studio 16 2019" -A x64
+      cd build/msvc2019-x64/Debug
+      cmake --verbose --build .
+      ctest --verbose
+    displayName: "MSVC++ 2019 x64 Debug build"
 
-  - task: CMake@1
-    displayName: "MSVC++ 2019 x32 build"
-    inputs:
-      cmakeArgs: '-S ../.. -G "Visual Studio 16 2019" -A Win32'
-      workingDirectory: build/msvc2019-x32
+  - script: |
+      cmake -S . -B build/msvc2019-x32/Release -DCMAKE_BUILD_TYPE=Release  -G "Visual Studio 16 2019" -A Win32
+      cd build/msvc2019-x32/Release
+      cmake --verbose --build .
+      ctest --verbose
+    displayName: "MSVC++ 2019 x32 Debug build"
 
 - job: build_macos
   displayName: MacOS build
@@ -48,8 +51,9 @@ jobs:
     vmImage: macos-10.14
 
   steps:
-  - task: CMake@1
-    displayName: "Xcode build"
-    inputs:
-      cmakeArgs: '-S ../.. -G "Xcode"'
-      workingDirectory: build/xcode
+  - script: |
+      cmake -S . -B build/xcode/Release -DCMAKE_BUILD_TYPE=Release  -G "Xcode"
+      cd build/xcode/Release
+      cmake --verbose --build .
+      ctest --verbose
+    displayName: "Xcode Release build"
