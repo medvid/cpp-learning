@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BUILD_TESTS TRUE CACHE BOOL "Build unit tests")
 
 if(BUILD_TESTS)
-    set(gtest_force_shared_crt ON)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     add_subdirectory(vendor/googletest)
     enable_testing()
 endif()
