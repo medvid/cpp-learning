@@ -11,7 +11,7 @@ jobs:
   steps:
   - script: |
       sudo apt update -qq
-      sudo apt install -y ninja clang
+      sudo apt install -y ninja-build clang
       cmake -v
       ninja -v
       gcc -v
@@ -43,19 +43,19 @@ jobs:
   - script: |
       cmake -S . -B build/msvc2019-x64 -G "Visual Studio 16 2019" -A x64
       cd build/msvc2019-x64
-      cmake --verbose --build . --config Debug
-      ctest --verbose --config Debug
-      cmake --verbose --build . --config Release
-      ctest --verbose --config Release
+      cmake --build . --config Debug --verbose
+      ctest --config Debug --verbose
+      cmake --build . --config Release --verbose
+      ctest --config Release --verbose
     displayName: "MSVC++ 2019 x64 build"
 
   - script: |
       cmake -S . -B build/msvc2019-x32 -G "Visual Studio 16 2019" -A Win32
       cd build/msvc2019-x32
-      cmake --verbose --build . --config Debug
-      ctest --verbose --config Debug
-      cmake --verbose --build . --config Release
-      ctest --verbose --config Release
+      cmake --build . --config Debug --verbose
+      ctest --config Debug --verbose
+      cmake --build . --config Release --verbose
+      ctest --config Release --verbose
     displayName: "MSVC++ 2019 x32 build"
 
 
@@ -69,6 +69,8 @@ jobs:
   - script: |
       cmake -S . -B build/xcode -G "Xcode"
       cd build/xcode
-      cmake --verbose --build . --config Release
-      ctest --verbose --config Release
+      cmake --build . --config Debug --verbose
+      ctest --config Debug --verbose
+      cmake --build . --config Release --verbose
+      ctest --config Release --verbose
     displayName: "Xcode build"
