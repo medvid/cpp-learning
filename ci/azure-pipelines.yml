@@ -15,7 +15,7 @@ jobs:
       wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
       sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main'
       sudo apt update -qq
-      sudo apt install -y libc6:i386 libstdc++:i386 cmake ninja-build clang lld libc++-dev libc++abi-dev
+      sudo apt install -y gcc-multilib cmake ninja-build clang lld libc++-dev libc++abi-dev
       cmake --version
       ninja --version
       gcc --version
