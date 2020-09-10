@@ -10,6 +10,15 @@ jobs:
 
   steps:
   - script: |
+      sudo apt update -qq
+      sudo apt install -y ninja clang
+      cmake -v
+      ninja -v
+      gcc -v
+      clang -v
+    displayName: "Install prerequisites"
+
+  - script: |
       cmake -S . -B build/gcc-x64/Debug -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror"
       cd build/gcc-x64/Debug
       cmake --verbose --build .
@@ -23,6 +32,7 @@ jobs:
       ctest --verbose
     displayName: "GCC x32 Release build"
 
+
 - job: build_windows
   displayName: Windows build
 
@@ -31,18 +41,23 @@ jobs:
 
   steps:
   - script: |
-      cmake -S . -B build/msvc2019-x64/Debug -DCMAKE_BUILD_TYPE=Debug  -G "Visual Studio 16 2019" -A x64
-      cd build/msvc2019-x64/Debug
-      cmake --verbose --build .
-      ctest --verbose
-    displayName: "MSVC++ 2019 x64 Debug build"
+      cmake -S . -B build/msvc2019-x64 -G "Visual Studio 16 2019" -A x64
+      cd build/msvc2019-x64
+      cmake --verbose --build . --config Debug
+      ctest --verbose --config Debug
+      cmake --verbose --build . --config Release
+      ctest --verbose --config Release
+    displayName: "MSVC++ 2019 x64 build"
 
   - script: |
-      cmake -S . -B build/msvc2019-x32/Release -DCMAKE_BUILD_TYPE=Release  -G "Visual Studio 16 2019" -A Win32
-      cd build/msvc2019-x32/Release
-      cmake --verbose --build .
-      ctest --verbose
-    displayName: "MSVC++ 2019 x32 Debug build"
+      cmake -S . -B build/msvc2019-x32 -G "Visual Studio 16 2019" -A Win32
+      cd build/msvc2019-x32
+      cmake --verbose --build . --config Debug
+      ctest --verbose --config Debug
+      cmake --verbose --build . --config Release
+      ctest --verbose --config Release
+    displayName: "MSVC++ 2019 x32 build"
+
 
 - job: build_macos
   displayName: MacOS build
@@ -52,8 +67,8 @@ jobs:
 
   steps:
   - script: |
-      cmake -S . -B build/xcode/Release -DCMAKE_BUILD_TYPE=Release  -G "Xcode"
-      cd build/xcode/Release
-      cmake --verbose --build .
-      ctest --verbose
-    displayName: "Xcode Release build"
+      cmake -S . -B build/xcode -G "Xcode"
+      cd build/xcode
+      cmake --verbose --build . --config Release
+      ctest --verbose --config Release
+    displayName: "Xcode build"
