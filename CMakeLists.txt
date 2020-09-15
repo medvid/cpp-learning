@@ -14,3 +14,4 @@ if(BUILD_TESTS)
 endif()
 
 add_subdirectory(librational)
+add_subdirectory(my_vector)
