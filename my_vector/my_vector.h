@@ -15,7 +15,7 @@ public:
     typedef value_type* const_iterator;
 
     my_vector(size_t size, const T& init_val):
-        size_m{size}, capacity_m{2*size}
+        size_m{size}, capacity_m{size ==  0 ? 1 : (2 * size)}
     {
         data_m = new T [capacity_m];
         for(size_t i = 0; i<size_m; ++i){
@@ -47,7 +47,7 @@ public:
             {
                 data_new[i] = data_m[i];
             }
-            delete data_m;
+            delete[] data_m;
             data_m = data_new;
             capacity_m = capacity_new;
         }
@@ -88,7 +88,7 @@ public:
     }
     const_iterator end() const
     {
-        return &data_m[size_m - 1];
+        return data_m + size_m;
     }
 
     ~my_vector(){
